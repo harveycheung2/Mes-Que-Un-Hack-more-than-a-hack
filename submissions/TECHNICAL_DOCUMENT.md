@@ -56,9 +56,11 @@ flowchart TD
 1. **Automatic Tracking (`atd`):** 
    - 2D player trajectories and pitch homography coordinates.
    - 22-player collective dynamics: centroid velocity, team dispersion (convex hull spread), and front-line depth differentials.
-2. **External Open Data:**
-   - **DFL IDSSE Dataset (CC-BY 4.0):** 7 open Bundesliga tracking matches used for out-of-domain cross-match validation and spatial feature training.
-   - **SkillCorner Open Tracking (MIT):** Open tracking datasets utilized for temporal sequence pre-training.
+2. **External Open Training Corpus (`data/external/`):**
+   - **DFL IDSSE Dataset (CC BY 4.0):** 7 open Bundesliga tracking matches (`J03WMX` through `J03WR9`, full tracking arrays committed under `data/external/idsse/cache/`, plus `idsse_7matches_features.csv`) used for spatial LightGBM training (`starter/train_spatial_model.py`) and sequence cross-validation.
+   - **Metrica Sports Open Data:** Sample Games 1–3 (`metrica_3games_features.csv` and official event streams under `data/external/metrica/`) used for sequence CNN dead-ball training.
+   - **SkillCorner Open Tracking (MIT):** Broadcast tracking matches (`skillcorner_4matches_features.csv` and 20 match phases of play under `data/external/skillcorner/`) utilized for sequence CNN training.
+   - Full dataset verification provided via `python starter/download_external_data.py`.
 3. **Smart Tagging:**
    - Used exclusively to verify half spans and kickoff / restart alignment.
 

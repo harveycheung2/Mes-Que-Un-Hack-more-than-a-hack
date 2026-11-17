@@ -31,10 +31,12 @@ experiments/results.csv
 experiments/test_*.py
 
 # -- gated data --------------------------------------------------------------------------------
-# data/ is committed empty, with only its README, so the folder participants are told to unpack
-# into actually exists in a fresh clone. Everything they put in it stays out of git.
+# Gated competition match data (BAR-ATH) must never be committed.
+# External open training datasets (Metrica, IDSSE, SkillCorner) are committed for 100% reproduction.
 data/*
 !data/README.md
+!data/external/
+!data/external/**
 
 *.mp4
 *.gzip

@@ -27,20 +27,37 @@ For the deep-dive empirical report on the 3.0s relabeling paradox, see [`docs/TE
 
 ## Quick Start
 
-### 1. Run the Model (End-to-End Inference)
+### 1. External Training Data Corpus
+The repository includes the full 100% external open training data corpus under [`data/external/`](data/external/README.md) (DFL IDSSE, Metrica, SkillCorner).
+To verify dataset integrity:
+```bash
+python starter/download_external_data.py
+```
+
+### 2. Run the Model (End-to-End Inference)
 Generates `submission.csv` directly from raw tracking data through the trained models and validates output:
 ```bash
 python run_model.py
 ```
 
-### 2. Verify Official Submission Deliverables
+### 3. Verify Official Submission Deliverables
 Validates 199,319 frames, checks 0 abstentions, and computes benchmark scores on public ground truth:
 ```bash
 python verify_submission.py
 # or: python submissions/verify_submission.py
 ```
 
-### 3. Run Unit & Integration Tests
+### 4. Train Models on External Data (Optional)
+To retrain the spatial LightGBM model from the included IDSSE dataset:
+```bash
+python starter/train_spatial_model.py
+```
+To train the sequence CNN dead-ball ensemble:
+```bash
+python starter/train_sequence_cnn.py
+```
+
+### 5. Run Unit & Integration Tests
 ```bash
 python tests/test_hierarchical_engine.py
 ```
