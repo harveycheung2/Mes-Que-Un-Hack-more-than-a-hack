@@ -27,19 +27,27 @@ For the deep-dive empirical report on the 3.0s relabeling paradox, see [`docs/TE
 
 ## Quick Start
 
-### 1. Run Unit Tests
+### 1. Run the Model (End-to-End Inference)
+Generates `submission.csv` directly from model artifacts and runs full validation in <1s:
+```bash
+python run_model.py
+```
+
+### 2. Verify Official Submission Deliverables
+Validates 199,319 frames, checks 0 abstentions, and computes benchmark scores on public ground truth:
+```bash
+python verify_submission.py
+# or: python submissions/verify_submission.py
+```
+
+### 3. Run Unit & Integration Tests
 ```bash
 python tests/test_hierarchical_engine.py
 ```
 
-### 2. Run Official Evaluation
+### 4. Run Official Evaluation Harness
 ```bash
 python evaluation/run_evaluation.py --results evaluation/results
-```
-
-### 3. Run Production Engine
-```bash
-python starter/hierarchical_engine.py
 ```
 
 ## Repository Structure

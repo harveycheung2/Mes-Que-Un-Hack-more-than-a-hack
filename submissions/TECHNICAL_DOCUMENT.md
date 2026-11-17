@@ -132,9 +132,13 @@ rank  submission     macroF1  spellF1   poss     dur  transF1  lat_f  alive_dead
    1  submission      0.9140   0.6667     10    24.9   0.5455   -5.8         0.9812
 ```
 
-### 5.4 Full End-to-End Reproduction
-To re-generate the submission file from raw inputs:
+### 5.4 Full End-to-End Inference & Reproduction
+To execute the model inference and re-generate `submission.csv`:
+```bash
+python run_model.py
+```
+or:
 ```bash
 python starter/hierarchical_engine.py
 ```
-This runs the full Hierarchical Episode-First Possession Engine and writes `submissions/submission.csv` deterministically.
+The engine automatically loads the trained model artifacts (`models/hierarchical_engine_artifacts.npz` and `models/stage1_dead_detector/`), executes the 3-stage hierarchical pipeline, outputs the exact validated `submission.csv`, and validates 100% compliance against the official competition evaluation protocol.

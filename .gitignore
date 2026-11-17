@@ -71,3 +71,4 @@ env/
 REFERENCES/
 catboost_info/
 scratch/
+.cache/

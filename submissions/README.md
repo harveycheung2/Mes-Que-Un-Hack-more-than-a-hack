@@ -55,10 +55,17 @@ When filling out the official competition Google Form, supply the following:
 
 ---
 
-## 🔍 How to Run Independent Verification
+## 🔍 How to Run Independent Verification & Model Inference
 
+### 1. Run the Model (End-to-End Inference)
+To execute the model inference from model artifacts and regenerate `submission.csv`:
+```bash
+python run_model.py
+```
+
+### 2. Verify Submission Format & Scores
 To verify that the file format, row structure, and scores are 100% correct prior to upload:
-
 ```bash
 python submissions/verify_submission.py
+# or: python verify_submission.py
 ```

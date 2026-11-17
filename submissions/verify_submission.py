@@ -8,13 +8,40 @@ import sys
 import numpy as np
 import pandas as pd
 
-ROOT = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
-sys.path.insert(0, os.path.join(ROOT, "evaluation"))
+HERE = os.path.dirname(os.path.abspath(__file__))
+ROOT = HERE if os.path.basename(HERE) != "submissions" else os.path.dirname(HERE)
+for cand_root in [ROOT, os.path.dirname(ROOT), os.path.join(ROOT, "evaluation")]:
+    if os.path.isdir(cand_root) and cand_root not in sys.path:
+        sys.path.insert(0, cand_root)
 
 import possession_metrics as pm
 
-SUBMISSION_FILE = os.path.join(os.path.dirname(os.path.abspath(__file__)), "submission.csv")
-GT_FILE = os.path.join(ROOT, "evaluation", "gt", "BAR-ATH_possession_gt_public.csv")
+def find_submission():
+    candidates = [
+        os.path.join(HERE, "submission.csv"),
+        os.path.join(HERE, "submissions", "submission.csv"),
+        os.path.join(ROOT, "submissions", "submission.csv"),
+        os.path.join(ROOT, "submission.csv"),
+        os.path.join(ROOT, "evaluation", "results", "submission.csv"),
+    ]
+    for cand in candidates:
+        if os.path.isfile(cand):
+            return cand
+    return candidates[0]
+
+def find_gt():
+    candidates = [
+        os.path.join(ROOT, "evaluation", "gt", "BAR-ATH_possession_gt_public.csv"),
+        os.path.join(HERE, "evaluation", "gt", "BAR-ATH_possession_gt_public.csv"),
+        os.path.join(HERE, "..", "evaluation", "gt", "BAR-ATH_possession_gt_public.csv"),
+    ]
+    for cand in candidates:
+        if os.path.isfile(cand):
+            return cand
+    return candidates[0]
+
+SUBMISSION_FILE = find_submission()
+GT_FILE = find_gt()
 N_EXPECTED = 199319
 
 

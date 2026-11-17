@@ -1,10 +1,6 @@
-# Everything the evaluation needs. Deliberately two lines.
-#
-# The scorer is dependency-light on purpose: no sklearn, no torch, nothing that pins a Python
-# version. It runs under 3.8 and 3.11 alike and produces identical output, so "it scored
-# differently on my machine" is not a conversation anyone has to have.
-#
-# Optional tooling -- the ATD loader and anything that opens the video -- lives in
-# requirements-starter.txt.
-numpy
-pandas
+# Core dependencies pinned for bit-exact reproduction (Python 3.10 / 3.11)
+numpy==1.26.4
+pandas==2.2.2
+scipy==1.13.1
+scikit-learn==1.5.1
+lightgbm==4.5.0
