@@ -22,6 +22,7 @@ Evaluated under the official competition protocol (`IoU 0.30–0.70`):
 3. **Biomechanical Dwell Filter ($\ge 1.0$s / 25 frames):** Transient contact and coordinate noise (<25 frames) are absorbed into adjacent active possessions within the episode, eliminating sensor flutter without compromising genuine quick turnover sequences.
 
 For complete architectural details, see [`docs/TECHNICAL_RATIONALE.md`](docs/TECHNICAL_RATIONALE.md).
+For team engineering insights and modeling roadmap, see [`docs/MODEL_IMPROVEMENT_GUIDE.md`](docs/MODEL_IMPROVEMENT_GUIDE.md).
 
 ## Quick Start
 
@@ -44,7 +45,8 @@ python starter/hierarchical_engine.py
 
 ```
 ├── docs/
-│   └── TECHNICAL_RATIONALE.md       # Technical methodology & domain invariants
+│   ├── TECHNICAL_RATIONALE.md       # Technical methodology & domain invariants
+│   └── MODEL_IMPROVEMENT_GUIDE.md   # Architectural insights & roadmap for teammates
 ├── starter/
 │   ├── hierarchical_engine.py       # Production possession engine
 │   ├── evaluate_external_matches.py # External match benchmark
