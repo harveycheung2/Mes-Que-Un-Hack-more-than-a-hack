@@ -23,6 +23,7 @@ Evaluated under the official competition protocol (`IoU 0.30–0.70`):
 
 For complete architectural details, see [`docs/TECHNICAL_RATIONALE.md`](docs/TECHNICAL_RATIONALE.md).
 For team engineering insights and modeling roadmap, see [`docs/MODEL_IMPROVEMENT_GUIDE.md`](docs/MODEL_IMPROVEMENT_GUIDE.md).
+For the deep-dive empirical report on the 3.0s relabeling paradox, see [`docs/TEAM_METHODOLOGY_AND_PROOF.md`](docs/TEAM_METHODOLOGY_AND_PROOF.md).
 
 ## Quick Start
 
@@ -46,7 +47,8 @@ python starter/hierarchical_engine.py
 ```
 ├── docs/
 │   ├── TECHNICAL_RATIONALE.md       # Technical methodology & domain invariants
-│   └── MODEL_IMPROVEMENT_GUIDE.md   # Architectural insights & roadmap for teammates
+│   ├── MODEL_IMPROVEMENT_GUIDE.md   # Architectural insights & roadmap for teammates
+│   └── TEAM_METHODOLOGY_AND_PROOF.md# 3.0s paradox proof & reproduction blueprint
 ├── starter/
 │   ├── hierarchical_engine.py       # Production possession engine
 │   ├── evaluate_external_matches.py # External match benchmark
