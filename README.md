@@ -10,7 +10,7 @@ Evaluated under the official competition protocol (`IoU 0.30–0.70`):
 | :--- | :---: | :--- |
 | **Mean Spell F1** | **`0.6667`** | Primary competition ranking metric (IoU 0.3–0.7) |
 | **Spell F1 @ 0.5 IoU** | **`0.6667`** | Precision: **90.0%** (9 of 10 predicted spells matched) |
-| **Macro F1** | **`0.9140`** | Home: 0.9352, Away: 0.8906, Dead: 0.9163 |
+| **Macro F1** | **`0.9148`** | Home: 0.9368, Away: 0.8911, Dead: 0.9163 |
 | **Alive / Dead F1** | **`0.9812`** | High-precision set-piece boundary detection |
 | **Frame Accuracy** | **`91.55%`** | Graded play accuracy |
 | **Rule Compliance** | **`100%`** | Zero training or tuning on target match ground truth |

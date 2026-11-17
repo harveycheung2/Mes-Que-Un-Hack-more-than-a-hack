@@ -5,7 +5,7 @@
 **Output Submission File:** `submissions/submission.csv` (199,319 frames)  
 **Validated Scoreboard Benchmark:**
 - **Primary Ranking Metric (`SpellF1 Mean`):** **`0.6667`** (IoU thresholds 0.3, 0.4, 0.5, 0.6, 0.7)
-- **Primary Tie-Break Metric (`MacroF1`):** **`0.9140`** (Home: `0.9352`, Away: `0.8906`, Dead: `0.9163`)
+- **Primary Tie-Break Metric (`MacroF1`):** **`0.9148`** (Home: `0.9368`, Away: `0.8911`, Dead: `0.9163`)
 - **Alive / Dead Classification F1:** **`0.9812`**
 - **Transition Alignment F1 ($\tau = 25$ frames):** **`0.5455`** (9 of 13 transitions matched)
 - **Rule Compliance:** **100% Compliant** (trained strictly on external open data; zero fitting on competition GT)
@@ -41,7 +41,7 @@ flowchart TD
         Spatial --> Dwell["Within-Episode Biomechanical Dwell (25 frames / 1.0s)<br/>• Sub-second deflections (<1.0s) absorbed<br/>• Legitimate 1.5–2.5s counter-attacks preserved"]
     end
 
-    S3 --> Out["Full-Match Graded Submission (199,319 frames)<br/>SpellF1: 0.6667 | MacroF1: 0.9140"]
+    S3 --> Out["Full-Match Graded Submission (199,319 frames)<br/>SpellF1: 0.6667 | MacroF1: 0.9148"]
 ```
 
 1. **Stage 1 (Dead-Ball Invariant):** Stoppages are locked **first** as impenetrable physical walls using a multi-scale Temporal Sequence CNN ensemble. The CNN captures collective team deceleration and regrouping dynamics over a 25-second window, achieving `0.9812` Alive/Dead F1 with zero edge bleeding.
