@@ -28,7 +28,7 @@ For the deep-dive empirical report on the 3.0s relabeling paradox, see [`docs/TE
 ## Quick Start
 
 ### 1. Run the Model (End-to-End Inference)
-Generates `submission.csv` directly from model artifacts and runs full validation in <1s:
+Generates `submission.csv` directly from raw tracking data through the trained models and validates output:
 ```bash
 python run_model.py
 ```

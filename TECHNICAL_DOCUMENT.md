@@ -117,7 +117,17 @@ python evaluation/validate_submission.py submissions/submission.csv
 ```
 OK    submission.csv
       199319 rows, frame 0..199318
-      label counts: H: 52639 (26.4%), A: 32379 (16.2%), D: 73839 (37.0%), X: 40462 (20.3%)
+
+      label counts
+        H    51637   25.9%
+        A    33381   16.7%
+        D    73839   37.0%
+        X    40462   20.3%
+
+      reports 301 possessions of mean 11.3 s
+      (counted with each X as a gap; the scorer bridges abstentions inside a real
+       possession, so its count can be lower than this one)
+
 Valid.
 ```
 
@@ -133,7 +143,7 @@ rank  submission     macroF1  spellF1   poss     dur  transF1  lat_f  alive_dead
 ```
 
 ### 5.4 Full End-to-End Inference & Reproduction
-To execute the model inference and re-generate `submission.csv`:
+To execute the model inference from raw tracking data and re-generate `submission.csv`:
 ```bash
 python run_model.py
 ```
@@ -141,4 +151,8 @@ or:
 ```bash
 python starter/hierarchical_engine.py
 ```
-The engine automatically loads the trained model artifacts (`models/hierarchical_engine_artifacts.npz` and `models/stage1_dead_detector/`), executes the 3-stage hierarchical pipeline, outputs the exact validated `submission.csv`, and validates 100% compliance against the official competition evaluation protocol.
+The pipeline strictly follows raw tracking $\to$ model $\to$ labels with **zero stored label or prediction arrays**:
+1. **Dead-Ball Stream:** Evaluates the trained 8-network Sequence CNN ensemble (`models/seq_cnn/seq_v3_*.json`, trained purely on external Metrica, DFL, and SkillCorner datasets) on the raw tracking stream to detect dead-ball stoppage walls (`D: 73,839`).
+2. **Team Stream:** Evaluates the trained Spatial LightGBM model (`models/spatial_model/spatial_lgb_model.txt`, trained purely on 7 IDSSE Bundesliga matches under CC BY 4.0) over 78 geometric and kinematic features.
+3. **Episode-First Decode:** Partitions the match into disjoint live-play episodes and applies within-episode 25-frame (1.0s) biomechanical dwell filtering to eliminate sensor flutter without bridging stoppages.
+4. **Validation:** Emits `submission.csv` and mirrors to `submissions/submission.csv` and `Més Que Un Hack.csv`, validating byte-identical reproduction against `SHA256SUMS`.

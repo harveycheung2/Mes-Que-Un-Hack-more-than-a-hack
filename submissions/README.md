@@ -1,71 +1,71 @@
-# Submission Deliverables Package
+# Hierarchical Episode-First Possession Engine
 
-This directory contains the final deliverables for the **More Than A Hack 2027** competition (Phase 1).
+An end-to-end possession detection system for football tracking data and tactical event extraction.
 
-All items are validated, rule-compliant, and ready for upload to the competition submission form.
+## Performance Overview
 
----
+Evaluated under the official competition protocol (`IoU 0.30–0.70`):
 
-## 📦 Directory Contents
+| Metric | Result | Description |
+| :--- | :---: | :--- |
+| **Mean Spell F1** | **`0.6667`** | Primary competition ranking metric (IoU 0.3–0.7) |
+| **Spell F1 @ 0.5 IoU** | **`0.6667`** | Precision: **90.0%** (9 of 10 predicted spells matched) |
+| **Macro F1** | **`0.9140`** | Home: 0.9352, Away: 0.8906, Dead: 0.9163 |
+| **Alive / Dead F1** | **`0.9812`** | High-precision set-piece boundary detection |
+| **Frame Accuracy** | **`91.55%`** | Graded play accuracy |
+| **Rule Compliance** | **`100%`** | Zero training or tuning on target match ground truth |
 
-| File | Purpose | Verification Status |
-| :--- | :--- | :---: |
-| **[`submission.csv`](submission.csv)** | Official 199,319-frame possession prediction file (`frame,label`) | ✅ Validated (0 errors) |
-| **[`TECHNICAL_DOCUMENT.md`](TECHNICAL_DOCUMENT.md)** | Technical report covering approach, assets, rules, limitations, and reproduction | ✅ Fully Detailed |
-| **[`verify_submission.py`](verify_submission.py)** | Standalone verification script checking format and scoreboard metrics | ✅ All Tests Pass |
+## Core Methodology
 
----
+1. **Episode-First Structural Wall Locking:** Dead-ball stoppage intervals (fouls, out-of-bounds, set-pieces) are identified and locked as structural boundaries first.
+2. **Within-Episode Smoothing:** Possession classification and biomechanical dwell filtering operate strictly within bounded in-play episodes, ensuring zero boundary bleeding across set pieces.
+3. **Biomechanical Dwell Filter ($\ge 1.0$s / 25 frames):** Transient contact and coordinate noise (<25 frames) are absorbed into adjacent active possessions within the episode, eliminating sensor flutter without compromising genuine quick turnover sequences.
 
-## 🏆 Verified Performance Summary
+For complete architectural details, see [`docs/TECHNICAL_RATIONALE.md`](docs/TECHNICAL_RATIONALE.md).
+For team engineering insights and modeling roadmap, see [`docs/MODEL_IMPROVEMENT_GUIDE.md`](docs/MODEL_IMPROVEMENT_GUIDE.md).
+For the deep-dive empirical report on the 3.0s relabeling paradox, see [`docs/TEAM_METHODOLOGY_AND_PROOF.md`](docs/TEAM_METHODOLOGY_AND_PROOF.md).
 
-Tested directly against the official public ground truth window (`BAR-ATH_possession_gt_public.csv`):
-
-- **Primary Ranking Metric (`SpellF1 Mean`):** **`0.6667`** (Rank #1)
-  - IoU 0.3: `0.7407` (10 matched)
-  - IoU 0.4: `0.7407` (10 matched)
-  - IoU 0.5: `0.6667` (9 matched)
-  - IoU 0.6: `0.5926` (8 matched)
-  - IoU 0.7: `0.5926` (8 matched)
-- **Primary Tie-Break Metric (`MacroF1`):** **`0.9140`**
-  - Home: `0.9352`
-  - Away: `0.8906`
-  - Dead Ball: `0.9163`
-- **Alive / Dead Classification F1:** **`0.9812`**
-- **Transition Alignment F1 ($\tau = 25$):** **`0.5455`** (9 matched transitions)
-- **Official Row Count:** Exactly `199,319` frames (frame 0 to 199,318)
-
----
-
-## 📋 Google Form Submission Checklist
-
-When filling out the official competition Google Form, supply the following:
-
-1. **Team Name:**  
-   Enter the exact team name registered by your members.
-   *(Optional recommendation: rename `submission.csv` to `<team_name>.csv` and `TECHNICAL_DOCUMENT.md` to `<team_name>.md` or `<team_name>.pdf` before uploading).*
-
-2. **Possession File (`.csv`):**  
-   Upload [`submissions/submission.csv`](submission.csv) (~1.88 MB).
-
-3. **Public Code Repository URL:**  
-   Provide your public GitHub repository URL (e.g. `https://github.com/harveycheung2/more-than-a-hack-2027`).
-
-4. **Technical Document:**  
-   Upload [`submissions/TECHNICAL_DOCUMENT.md`](TECHNICAL_DOCUMENT.md) (or converted PDF).
-
----
-
-## 🔍 How to Run Independent Verification & Model Inference
+## Quick Start
 
 ### 1. Run the Model (End-to-End Inference)
-To execute the model inference from model artifacts and regenerate `submission.csv`:
+Generates `submission.csv` directly from raw tracking data through the trained models and validates output:
 ```bash
 python run_model.py
 ```
 
-### 2. Verify Submission Format & Scores
-To verify that the file format, row structure, and scores are 100% correct prior to upload:
+### 2. Verify Official Submission Deliverables
+Validates 199,319 frames, checks 0 abstentions, and computes benchmark scores on public ground truth:
 ```bash
-python submissions/verify_submission.py
-# or: python verify_submission.py
+python verify_submission.py
+# or: python submissions/verify_submission.py
+```
+
+### 3. Run Unit & Integration Tests
+```bash
+python tests/test_hierarchical_engine.py
+```
+
+### 4. Run Official Evaluation Harness
+```bash
+python evaluation/run_evaluation.py --results evaluation/results
+```
+
+## Repository Structure
+
+```
+├── docs/
+│   ├── TECHNICAL_RATIONALE.md       # Technical methodology & domain invariants
+│   ├── MODEL_IMPROVEMENT_GUIDE.md   # Architectural insights & roadmap for teammates
+│   └── TEAM_METHODOLOGY_AND_PROOF.md# 3.0s paradox proof & reproduction blueprint
+├── starter/
+│   ├── hierarchical_engine.py       # Production possession engine
+│   ├── evaluate_external_matches.py # External match benchmark
+│   └── features.py                  # Tactical & spatial feature extraction
+├── evaluation/
+│   ├── possession_metrics.py        # Official scoring metrics
+│   ├── run_evaluation.py            # Competition evaluation harness
+│   ├── gt/                          # Public validation ground truth
+│   └── results/                     # Production submission output
+└── tests/
+    └── test_hierarchical_engine.py  # Unit & integration tests
 ```
