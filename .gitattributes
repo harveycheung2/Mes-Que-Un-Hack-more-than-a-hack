@@ -1,6 +1,6 @@
 * text=auto
 *.txt text eol=lf
-*.csv text eol=lf
+*.csv -text
 *.py text eol=lf
 *.md text eol=lf
 *.npz binary

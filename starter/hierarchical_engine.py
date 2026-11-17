@@ -221,18 +221,18 @@ def run_pipeline(data_dir=None, models_dir=None, out_path=None, min_live_frames=
     os.makedirs(os.path.dirname(os.path.abspath(out_path)), exist_ok=True)
     
     table = pd.DataFrame({"frame": np.arange(n_frames), "label": final_labels})
-    table.to_csv(out_path, index=False)
+    table.to_csv(out_path, index=False, lineterminator="\n")
     print(f"  Saved submission to: {out_path}")
     
     # Mirror copies
     sub_mirror = os.path.join(ROOT, "submissions", "submission.csv")
     if os.path.abspath(out_path) != os.path.abspath(sub_mirror):
         os.makedirs(os.path.dirname(sub_mirror), exist_ok=True)
-        table.to_csv(sub_mirror, index=False)
+        table.to_csv(sub_mirror, index=False, lineterminator="\n")
         
     mes_mirror = os.path.join(ROOT, "Més Que Un Hack.csv")
     if os.path.abspath(out_path) != os.path.abspath(mes_mirror):
-        table.to_csv(mes_mirror, index=False)
+        table.to_csv(mes_mirror, index=False, lineterminator="\n")
         
     # Format validation
     val = pm.validate_submission(table, n_frames)
