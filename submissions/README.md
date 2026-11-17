@@ -18,14 +18,14 @@ Evaluated under the official competition protocol (`IoU 0.30–0.70`):
 Both versions are evaluated above: the submitted output uses 50-frame probability smoothing (`spellF1 = 0.667`), while the unsmoothed version scores `0.652`. The gap comes from 20 frames on a single contested spell boundary and is within the scorer's noise.
 
 ### Smoothing
-The spatial stream's probabilities are smoothed over 50 frames (2 s) before the home/away decision. 50 is the starter kit's default width (`starter/tactical.py`, `decode_pipeline(w=50)`), and also the organisers' baseline window. It was added in commit `e2f3789` after the unsmoothed version scored 0.652 on the public window, and a probe of several windows was run on that window. On the Bundesliga matches it is neutral (0.654 vs 0.655 against 1-second labels).
+The spatial stream's probabilities are smoothed over 50 frames (2 s) before the home/away decision. 50 is the starter kit's default width (`starter/tactical.py`, `decode_pipeline(w=50)`), and also the organisers' baseline window. It was added in commit `e2f3789` after the unsmoothed version scored 0.652 on the public window, and a probe of several windows was run on that window.
 
 ## Core Methodology
 
 1. **Episode-First Structural Wall Locking:** Dead-ball stoppage intervals (fouls, out-of-bounds, set-pieces) are identified and locked as structural boundaries first.
 2. **Within-Episode Smoothing:** Possession classification and biomechanical dwell filtering operate strictly within bounded in-play episodes, ensuring zero boundary bleeding across set pieces.
 3. **Biomechanical Dwell Filter ($\ge 1.0$s / 25 frames):** Transient contact and coordinate noise (<25 frames) are absorbed into adjacent active possessions within the episode, eliminating sensor flutter without compromising quick turnover sequences.
-4. **Kickoff-Wait Rule:** The dead-ball sequence model implements a kickoff-wait rule for half-openings. In the second half, where tracking begins ~2 minutes before the opening kickoff, frames where players remain below typical running speeds are held as dead (`D`) until the restart.
+4. **Kickoff-Wait Rule:** The dead-ball sequence model implements a kickoff-wait rule for half-openings. In the second half, where tracking begins ~2 minutes before the opening kickoff, frames where players remain below typical running speeds are held as dead (`D`) until the restart. This rule was added after the sequence networks labelled most of the second-half pre-kickoff wait as live play.
 
 For architectural details, see [`docs/TECHNICAL_RATIONALE.md`](../docs/TECHNICAL_RATIONALE.md).
 For engineering insights and modeling roadmap, see [`docs/MODEL_IMPROVEMENT_GUIDE.md`](../docs/MODEL_IMPROVEMENT_GUIDE.md).

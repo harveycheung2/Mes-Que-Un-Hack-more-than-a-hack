@@ -51,7 +51,7 @@ flowchart TD
 3. **Stage 3 (Bounded Biomechanical Dwell):** Inside each open-play episode, team ownership is inferred using spatial player-ball geometry. Sub-second sensor flutter is absorbed strictly within the episode boundary using a **1.0-second (25-frame) biomechanical dwell filter**, preventing false cuts without crushing genuine 1.5–2.5s turnover possessions.
 
 ### 1.3 Smoothing
-The spatial stream's probabilities are smoothed over 50 frames (2 s) before the home/away decision. 50 is the starter kit's default width (`starter/tactical.py`, `decode_pipeline(w=50)`), and also the organisers' baseline window. It was added in commit `e2f3789` after the unsmoothed version scored 0.652 on the public window, and a probe of several windows was run on that window. On the Bundesliga matches it is neutral (0.654 vs 0.655 against 1-second labels).
+The spatial stream's probabilities are smoothed over 50 frames (2 s) before the home/away decision. 50 is the starter kit's default width (`starter/tactical.py`, `decode_pipeline(w=50)`), and also the organisers' baseline window. It was added in commit `e2f3789` after the unsmoothed version scored 0.652 on the public window, and a probe of several windows was run on that window.
 
 ---
 
@@ -93,7 +93,7 @@ Our rules adhere strictly to the mandate in `CHALLENGE.md` and the official 5-mi
 | **Quick Turnover / Counter-Press** | 1.0s – 2.5s (25–62 frames) | **Preserved as Possession** | When a defending team intercepts, takes 1–2 touches, and completes a pass, it is a valid possession. Ground truth contains spells as short as 0.76s (GT 10) and 1.32s (GT 12). |
 | **Dead-Ball Stoppage** | Variable (typically > 5s) | **Label `D` (Impenetrable Wall)** | Whenever play stops, ownership is not assigned. Stoppages act as hard walls that cannot be bridged. |
 | **Contested Loose Ball** | Variable | **Retained by Last Possessor** | Possession remains with the team that had controlled possession immediately prior until the opponent establishes $\ge 1.0$s of control. |
-| **Kickoff-Wait (Pre-Kickoff Delay)** | Variable (~2 min in 2nd half) | **Label `D` (Dead Ball)** | In the second half, tracking begins ~2 minutes before the opening kickoff (frame 113,742). The kickoff-wait rule in `starter/seq_model/seq/network.py` holds frames where player running speeds remain below typical live-play intensity as dead (`D`) until the kickoff. |
+| **Kickoff-Wait (Pre-Kickoff Delay)** | Variable (~2 min in 2nd half) | **Label `D` (Dead Ball)** | In the second half, tracking begins ~2 minutes before the opening kickoff (frame 113,742). The kickoff-wait rule in `starter/seq_model/seq/network.py` holds frames where player running speeds remain below typical live-play intensity as dead (`D`) until the kickoff. This rule was added after the sequence networks labelled most of the second-half pre-kickoff wait as live play. |
 
 ---
 

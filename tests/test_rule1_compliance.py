@@ -1,10 +1,11 @@
-"""Automated Rule 1 & Rule 3 Compliance Verification Test Suite.
+"""Automated Rule Compliance Verification Test Suite.
 
 Verifies:
-1. Zero training or tuning on target match ground truth (Rule 1).
-2. Live reproduction from raw tracking without static answer arrays (Rule 3).
-3. The smoothing window w=50 is a canonical starter-kit default from Nov 4, 2026,
-   not tuned against the competition ground truth.
+1. Ground-truth independence in core prediction pipeline files.
+2. Checks that the smoothing width used by the engine equals the default in
+   starter/tactical.py (50 frames). This is a provenance check on the value,
+   not evidence about how it was chosen; see section 1.3 of the technical
+   document for that.
 """
 
 import os
@@ -23,7 +24,7 @@ GT_PATTERNS = re.compile(r"BAR-ATH_possession_gt|gt_public|load_gt\(\)")
 class TestRuleCompliance(unittest.TestCase):
 
     def test_pipeline_files_do_not_touch_ground_truth(self):
-        """Rule 1 Guard: Ensure core prediction pipeline is 100% blind to ground truth."""
+        """Ensure core prediction pipeline files contain no direct references to ground truth."""
         guarded_files = [
             "run_model.py",
             "starter/hierarchical_engine.py",
@@ -46,7 +47,7 @@ class TestRuleCompliance(unittest.TestCase):
             self.assertEqual(len(hits), 0, f"Violation in {rel_path}: Contains GT reference: {hits}")
 
     def test_w50_originates_from_starter_tactical(self):
-        """Rule 1 Guard: Verify w=50 originates from official starter kit default, not local tuning."""
+        """Checks that the smoothing width used by the engine equals the default in starter/tactical.py (50 frames). This is a provenance check on the value, not evidence about how it was chosen; see section 1.3 of the technical document for that."""
         from starter.tactical import decode_pipeline
         import inspect
         sig = inspect.signature(decode_pipeline)
