@@ -121,12 +121,12 @@ OK    submission.csv
       199319 rows, frame 0..199318
 
       label counts
-        H    51637   25.9%
-        A    33381   16.7%
+        H    51780   26.0%
+        A    33238   16.7%
         D    73839   37.0%
         X    40462   20.3%
 
-      reports 301 possessions of mean 11.3 s
+      reports 267 possessions of mean 12.7 s
       (counted with each X as a gap; the scorer bridges abstentions inside a real
        possession, so its count can be lower than this one)
 
@@ -141,7 +141,7 @@ python evaluation/run_evaluation.py --results submissions
 *Expected Scoreboard Metrics:*
 ```
 rank  submission     macroF1  spellF1   poss     dur  transF1  lat_f  alive_dead_f1
-   1  submission      0.9140   0.6667     10    24.9   0.5455   -5.8         0.9812
+   1  submission      0.9148   0.6667     10    24.9   0.4848   -9.0         0.9812
 ```
 
 ### 5.4 Full End-to-End Inference & Reproduction

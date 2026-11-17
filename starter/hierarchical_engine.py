@@ -45,6 +45,7 @@ import external as ext
 import external_pipeline as ep
 import possession_metrics as pm
 from baseline import write_submission
+from benchmark import smooth_proba
 
 
 def run_length_runs(arr):
@@ -172,18 +173,20 @@ def predict_sequence_cnn(data_dir=None):
     return seq_labels
 
 
-def predict_spatial(trk, is_home, spans, spatial_booster):
+def predict_spatial(trk, is_home, spans, spatial_booster, window=50):
     """Execute Spatial LightGBM classifier on player/ball kinematic features."""
     n_frames = len(trk["ball"])
     X, aux = ep.featureset(trk, is_home, advanced=True, boundary=True, motion=True, dynamics=False, setpiece=False, drop_ball_motion=False)
     P = np.zeros((n_frames, 3), dtype=np.float32)
     for a, b in spans:
         P[a:b] = spatial_booster.predict(X[a:b])
+    if window and window > 1:
+        P = smooth_proba(P, window)
     spatial_labels = np.where(P[:, 0] >= P[:, 1], "H", "A")
     return spatial_labels
 
 
-def run_pipeline(data_dir=None, models_dir=None, out_path=None, min_live_frames=25):
+def run_pipeline(data_dir=None, models_dir=None, out_path=None, min_live_frames=25, spatial_window=50):
     """End-to-end execution: Tracking Data -> Model Weights -> Episode-First Decode -> CSV."""
     t0 = time.time()
     if data_dir is not None:
@@ -204,10 +207,10 @@ def run_pipeline(data_dir=None, models_dir=None, out_path=None, min_live_frames=
     d_count = int(np.sum(seq_labels == "D"))
     print(f"  Sequence CNN completed in {time.time()-t_cnn:.1f}s: locked {d_count:,} frames of dead-ball walls.")
     
-    print("\n[3/4] Running Stream 2: Spatial LightGBM Classifier (7 IDSSE Bundesliga matches, 78 features)...")
+    print(f"\n[3/4] Running Stream 2: Spatial LightGBM Classifier (7 IDSSE matches, 78 features, window={spatial_window})...")
     t_spat = time.time()
     spatial_booster = load_spatial_model(models_dir=models_dir)
-    spatial_labels = predict_spatial(trk, is_home, spans, spatial_booster)
+    spatial_labels = predict_spatial(trk, is_home, spans, spatial_booster, window=spatial_window)
     print(f"  Spatial LightGBM completed in {time.time()-t_spat:.1f}s.")
     
     print("\n[4/4] Hierarchical Episode-First Decode & Within-Episode Biomechanical Dwell (25f)...")
